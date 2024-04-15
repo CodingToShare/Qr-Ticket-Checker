@@ -1,0 +1,46 @@
+﻿<br />
+<br />
+<h2>Fases</h2>
+
+@(Html.DevExtreme().DataGrid<Qr_Ticket_Checker.Models.Phase>()
+    .AllowColumnReordering(true)
+    .RowAlternationEnabled(true)
+    .ShowRowLines(true)
+    .ShowBorders(true)
+    .WordWrapEnabled(true)
+    .SearchPanel(s => s
+        .Visible(true)
+        .HighlightCaseSensitive(true))
+    .Grouping(grouping => grouping.AutoExpandAll(true))
+    .GroupPanel(groupPanel => groupPanel.Visible(true))
+    .FilterPanel(f => f.Visible(true))
+    .HeaderFilter(h => h.Visible(true))
+    .RemoteOperations(true)
+    .ColumnChooser(c => c.Enabled(true))
+    .DataSource(ds => ds.Mvc()
+        .Controller("APIPhases")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .Key("PhaseID")
+    )
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+        columns.AddFor(m => m.PhaseID).AllowEditing(false).Visible(false);
+
+        columns.AddFor(m => m.PhaseName);
+
+        columns.AddFor(m => m.Created).AllowEditing(false);
+
+        columns.AddFor(m => m.CreatedBy).AllowEditing(false);
+
+        columns.AddFor(m => m.Modify).AllowEditing(false);
+
+        columns.AddFor(m => m.ModifyBy).AllowEditing(false);
+    })
+    .Editing(e => e
+        .AllowAdding(true)
+        .AllowUpdating(true)
+    )
+)

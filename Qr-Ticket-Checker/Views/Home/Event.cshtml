@@ -1,0 +1,48 @@
+﻿<br />
+<br />
+<h2>Eventos</h2>
+
+@(Html.DevExtreme().DataGrid<Qr_Ticket_Checker.Models.Event>()
+    .AllowColumnReordering(true)
+    .RowAlternationEnabled(true)
+    .ShowRowLines(true)
+    .ShowBorders(true)
+    .WordWrapEnabled(true)
+    .SearchPanel(s => s
+        .Visible(true)
+        .HighlightCaseSensitive(true))
+    .Grouping(grouping => grouping.AutoExpandAll(true))
+    .GroupPanel(groupPanel => groupPanel.Visible(true))
+    .FilterPanel(f => f.Visible(true))
+    .HeaderFilter(h => h.Visible(true))
+    .RemoteOperations(true)
+    .ColumnChooser(c => c.Enabled(true))
+    .DataSource(ds => ds.Mvc()
+        .Controller("APIEvents")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .Key("EventID")
+    )
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+        columns.AddFor(m => m.EventID).AllowEditing(false).Visible(false);
+
+        columns.AddFor(m => m.EventName);
+
+        columns.AddFor(m => m.TicketNumber);
+
+        columns.AddFor(m => m.Created).AllowEditing(false);
+
+        columns.AddFor(m => m.CreatedBy).AllowEditing(false);
+
+        columns.AddFor(m => m.Modify).AllowEditing(false);
+
+        columns.AddFor(m => m.ModifyBy).AllowEditing(false);
+    })
+    .Editing(e => e
+        .AllowAdding(true)
+        .AllowUpdating(true)
+    )
+)

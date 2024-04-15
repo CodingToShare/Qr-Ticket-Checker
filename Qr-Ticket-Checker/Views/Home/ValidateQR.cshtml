@@ -1,0 +1,34 @@
+﻿@model Qr_Ticket_Checker.Models.ViewModels.ValidatePersonViewModel
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+
+<center>
+    <h1>Validacion Evento - @Model.EventName</h1>
+    <br />
+    <h3>Fase</h3>
+    <h5>@Model.PhaseName</h5>
+    <br />
+    <h3>Nombres y Apellidos</h3>
+    <h5>@Model.Name @Model.LastName</h5>
+    <br />
+    <h3>Documento</h3>
+    <h5>@Model.DocumentType @Model.DocumentNumber</h5>
+    <br />
+    <h3>Correo</h3>
+    <h5>@Model.Email</h5>
+    <br />
+    <h3>Celular</h3>
+    <h5>@Model.Phone</h5>
+    <br />
+    <h3>Estado</h3>
+    <h5>@Model.IsActive</h5>
+    <br />
+    @if (User.Identity.IsAuthenticated && Model.IsActive != "Ingresado")
+    {
+        <a href="/Home/Validate/@Model.PersonID" class="btn btn-primary">Validar Entrada</a>
+        <br />
+    }
+</center>
+
+
+

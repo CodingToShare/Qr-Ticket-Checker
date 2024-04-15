@@ -1,0 +1,406 @@
+﻿@model Qr_Ticket_Checker.Models.ViewModels.PersonViewModel
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+
+<h1>Envio Notificacion a Participantes Eventos</h1>
+<br />
+
+<div class="row">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="dx-field">
+                <div class="dx-field-item-label-location-top">@Html.LabelFor(x => x.EventID)</div>
+                <div class="dx-field-item-content-location-bottom">
+                    @(Html.DevExtreme().SelectBoxFor(x => x.EventID)
+                        .DisplayExpr("EventName")
+                        .ValueExpr("EventID")
+                        .ID("EventID")
+                        .DataSource(d => d.Mvc().Controller("APIEvents").LoadAction("Get"))
+                        .SearchMode(DropDownSearchMode.Contains)
+                        .SearchEnabled(true)
+                        .MinSearchLength(3)
+                        .ShowDataBeforeSearch(true)
+                        .ShowDropDownButton(true)
+                        .DeferRendering(false)
+                        .Placeholder("Seleccione una evento")
+                        )
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="dx-field">
+                <div class="dx-field-item-label-location-top">@Html.LabelFor(x => x.PhaseIdentifiers)</div>
+                <div class="dx-field-item-content-location-bottom">
+                    @(Html.DevExtreme().DropDownBoxFor(x => x.PhaseIdentifiers)
+                        .InputAttr("aria-label", "Owner")
+                        .ValueExpr("PhaseID")
+                        .DisplayExpr("PhaseName")
+                        .ID("PhaseID")
+                        .DataSource(d => d.Mvc()
+                        .Controller("APIPhases")
+                        .LoadAction("Get")
+                        .LoadMode(DataSourceLoadMode.Raw)
+                        .Key("PhaseID")
+                        )
+                        .Placeholder("Selecione las fases")
+                        .ShowClearButton(true)
+                        .OnValueChanged("gridBox_valueChanged")
+                        .ContentTemplate(new TemplateName("EmbeddedDataGridMultiple"))
+                        )
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="dx-field">
+                <div class="dx-field-item-label-location-top">@Html.LabelFor(x => x.Name)</div>
+                <div class="dx-field-item-content-location-bottom">
+                    @(Html.DevExtreme().TextBoxFor(x => x.Name)
+                        .ID("Name").MaxLength(100)
+                        )
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="dx-field">
+                <div class="dx-field-item-label-location-top">@Html.LabelFor(x => x.LastName)</div>
+                <div class="dx-field-item-content-location-bottom">
+                    @(Html.DevExtreme().TextBoxFor(x => x.LastName)
+                        .ID("LastName").MaxLength(100)
+                        )
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="dx-field">
+                <div class="dx-field-item-label-location-top">@Html.LabelFor(x => x.DocumentType)</div>
+                <div class="dx-field-item-content-location-bottom">
+                    @(Html.DevExtreme().SelectBoxFor(x => x.DocumentType)
+                        .DisplayExpr("Text")
+                        .ValueExpr("Value")
+                        .ID("DocumentType")
+                        .DataSource(Html.GetEnumSelectList<Qr_Ticket_Checker.Enums.DocumentType>
+                        ()
+                        .Select(i => new { Value = int.Parse(i.Value), Text = i.Text })
+                        )
+                        .SearchMode(DropDownSearchMode.Contains)
+                        .SearchEnabled(true)
+                        .MinSearchLength(3)
+                        .ShowDataBeforeSearch(true)
+                        .ShowDropDownButton(true)
+                        .DeferRendering(false)
+                        .Placeholder("Seleccione una evento")
+                        )
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="dx-field">
+                <div class="dx-field-item-label-location-top">@Html.LabelFor(x => x.DocumentNumber)</div>
+                <div class="dx-field-item-content-location-bottom">
+                    @(Html.DevExtreme().TextBoxFor(x => x.DocumentNumber)
+                        .ID("DocumentNumber").MaxLength(100)
+                        )
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="dx-field">
+                <div class="dx-field-item-label-location-top">@Html.LabelFor(x => x.Email)</div>
+                <div class="dx-field-item-content-location-bottom">
+                    @(Html.DevExtreme().TextBoxFor(x => x.Email)
+                        .ID("Email").MaxLength(100)
+                        )
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <div class="dx-field">
+                <div class="dx-field-item-label-location-top">@Html.LabelFor(x => x.Phone)</div>
+                <div class="dx-field-item-content-location-bottom">
+                    @(Html.DevExtreme().TextBoxFor(x => x.Phone)
+                        .ID("Phone").MaxLength(100)
+                        )
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="center">
+                @(Html.DevExtreme().Button()
+                    .ElementAttr("class", "validate")
+                    .Icon("plus")
+                    .Text("Agregar Persona")
+                    .Type(ButtonType.Normal)
+                    .UseSubmitBehavior(true)
+                    .ID("AddButton")
+                    )
+            </div>
+        </div>
+    </div>
+    <br />
+    <h1>Regsitros de Participantes Eventos</h1>
+    <br />
+    <div class="col-md-12">
+        @(Html.DevExtreme().DataGrid<Qr_Ticket_Checker.Models.Event>()
+            .ID("GridEvent")
+            .AllowColumnReordering(true)
+            .RowAlternationEnabled(true)
+            .ShowRowLines(true)
+            .ShowBorders(true)
+            .WordWrapEnabled(true)
+            .SearchPanel(s => s
+            .Visible(true)
+            .HighlightCaseSensitive(true))
+            .Grouping(grouping => grouping.AutoExpandAll(true))
+            .GroupPanel(groupPanel => groupPanel.Visible(true))
+            .FilterPanel(f => f.Visible(true))
+            .HeaderFilter(h => h.Visible(true))
+            .RemoteOperations(true)
+            .ColumnChooser(c => c.Enabled(true))
+            .DataSource(ds => ds.Mvc()
+            .Controller("APIEvents")
+            .LoadAction("Get")
+            .UpdateAction("Put")
+            .Key("EventID")
+            )
+            .RemoteOperations(true)
+            .Columns(columns =>
+            {
+                columns.AddFor(m => m.EventID).AllowEditing(false).Visible(false);
+
+                columns.AddFor(m => m.EventName);
+
+                columns.AddFor(m => m.TicketNumber);
+
+                columns.AddFor(m => m.Created).AllowEditing(false);
+
+                columns.AddFor(m => m.CreatedBy).AllowEditing(false);
+
+                columns.AddFor(m => m.Modify).AllowEditing(false);
+
+                columns.AddFor(m => m.ModifyBy).AllowEditing(false);
+            })
+            .Editing(e => e
+            .AllowUpdating(true)
+            )
+            .MasterDetail(m => m
+            .Enabled(true)
+            .Template(new TemplateName("gridContainer-peoples"))
+            )
+        )
+    </div>
+</div>
+
+@using (Html.DevExtreme().NamedTemplate("EmbeddedDataGridMultiple"))
+{
+    @(Html.DevExtreme().DataGrid()
+            .ID("embedded-datagrid")
+            .DataSource(new JS(@"component.getDataSource()"))
+            .Columns(columns =>
+            {
+                    columns.Add().DataField("PhaseName");
+            })
+            .HoverStateEnabled(true)
+            .Paging(p => p.PageSize(10))
+            .FilterRow(f => f.Visible(true))
+            .Scrolling(s => s.Mode(GridScrollingMode.Virtual))
+            .Height(345)
+            .Selection(s => s.Mode(SelectionMode.Multiple))
+            .SelectedRowKeys(new JS(@"component.option(""value"")"))
+            .OnSelectionChanged(@<text>
+    function(selectedItems) {
+    var keys = selectedItems.selectedRowKeys;
+    component.option("value", keys);
+    }
+</text>)
+        )
+}
+
+@using (Html.DevExtreme().NamedTemplate("gridContainer-peoples"))
+{
+    @(Html.DevExtreme().DataGrid<Qr_Ticket_Checker.Models.Person>()
+        .AllowColumnReordering(true)
+        .RowAlternationEnabled(true)
+        .ShowRowLines(true)
+        .ShowBorders(true)
+        .WordWrapEnabled(true)
+        .SearchPanel(s => s
+        .Visible(true)
+        .HighlightCaseSensitive(true))
+        .Grouping(grouping => grouping.AutoExpandAll(true))
+        .GroupPanel(groupPanel => groupPanel.Visible(true))
+        .FilterPanel(f => f.Visible(true))
+        .HeaderFilter(h => h.Visible(true))
+        .RemoteOperations(true)
+        .ColumnChooser(c => c.Enabled(true))
+        .DataSource(ds => ds.Mvc()
+            .Controller("APIPeople")
+            .LoadAction("Get")
+            .UpdateAction("Put")
+            .Key("PersonID")
+            .LoadParams(new { id = new JS("data.EventID") })
+        )
+        .RemoteOperations(true)
+        .Columns(columns => {
+
+            columns.AddFor(m => m.PersonID).AllowEditing(false).Visible(false);
+
+            columns.AddFor(m => m.EventID).AllowEditing(false).Visible(false);
+
+            columns.AddFor(m => m.PhaseID).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("APIPeople").LoadAction("PhasesLookup").Key("Value"))
+            .ValueExpr("Value")
+            .DisplayExpr("Text")
+            ).GroupIndex(0);
+
+            columns.AddFor(m => m.Name);
+
+            columns.AddFor(m => m.LastName);
+
+            columns.AddFor(m => m.DocumentNumber);
+
+            columns.AddFor(m => m.Email);
+
+            columns.AddFor(m => m.Phone);
+
+            columns.AddFor(m => m.Created).AllowEditing(false);
+
+            columns.AddFor(m => m.CreatedBy).AllowEditing(false);
+
+            columns.AddFor(m => m.Modify).AllowEditing(false);
+
+            columns.AddFor(m => m.ModifyBy).AllowEditing(false);
+        })
+        .Editing(e => e
+            .AllowUpdating(true)
+        )
+    )
+}
+
+<script>
+    function gridBox_valueChanged(e) {
+        var $dataGrid = $("#embedded-datagrid");
+
+        if ($dataGrid.length) {
+            var dataGrid = $dataGrid.dxDataGrid("instance");
+            dataGrid.selectRows(e.value, false);
+        }
+    }
+
+    //Boton Agregar Barrido
+    $(function () {
+        $("#AddButton").dxButton({
+            onClick: function (e) {
+                var event = $("#EventID").dxSelectBox("instance").option("value");
+                var phaseArray = $("#PhaseID").dxDropDownBox("instance").option("value");
+                var phase = phaseArray.join(',');
+                var name = $("#Name").dxTextBox("instance").option("value");
+                var lastName = $("#LastName").dxTextBox("instance").option("value");
+                var documentType = $("#DocumentType").dxSelectBox("instance").option("value");
+                var documentNumber = $("#DocumentNumber").dxTextBox("instance").option("value");
+                var email = $("#Email").dxTextBox("instance").option("value");
+                var phone = $("#Phone").dxTextBox("instance").option("value");
+
+                // Crear el objeto con los datos
+                var dataToSendPerson = {
+                    EventID: event,
+                    Name: name,
+                    LastName: lastName,
+                    DocumentType: documentType,
+                    DocumentNumber: documentNumber,
+                    Email: email,
+                    Phone: phone,
+                    PhaseIdentifiers: phase,
+                };
+
+                // Realizar la solicitud AJAX
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Process/Create",
+                    contentType: "application/json",
+                    data: JSON.stringify(dataToSendPerson),
+                    success: function (response) {
+
+                        if (response.Value) {
+                            // Recargar el DataGrid después de una solicitud exitosa
+                            $("#GridEvent").dxDataGrid("instance").refresh();
+                            // Limpiar los controles después de agregar
+                            $("#EventID").dxSelectBox("instance").option("value", null);
+                            $("#PhaseID").dxDropDownBox("instance").option("value", null);
+                            $("#Name").dxTextBox("instance").option("value", null);
+                            $("#LastName").dxTextBox("instance").option("value", null);
+                            $("#DocumentType").dxSelectBox("instance").option("value", null);
+                            $("#DocumentNumber").dxTextBox("instance").option("value", null);
+                            $("#Email").dxTextBox("instance").option("value", null);
+                            $("#Phone").dxTextBox("instance").option("value", null);
+
+                            DevExpress.ui.notify(
+                                {
+                                    message: "Se envio la notificacion de forma exitosa.",
+                                    width: 500,
+                                    position: {
+                                        my: "bottom",
+                                        at: "bottom",
+                                        of: "#container"
+                                    }
+                                },
+                                "info",
+                                2000
+                            );
+                        }
+                        else{
+                            DevExpress.ui.notify(
+                                {
+                                    message: "Ya se vendieron todas las entradas del evento que intenta registrar",
+                                    width: 500,
+                                    position: {
+                                        my: "bottom",
+                                        at: "bottom",
+                                        of: "#container"
+                                    }
+                                },
+                                "error",
+                                2000
+                            );
+
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        // Manejar errores aquí
+                        console.error("Error en la solicitud AJAX:", errorThrown);
+
+                        DevExpress.ui.notify(
+                            {
+                                message: "No fue posible enviar la notificacion.",
+                                width: 500,
+                                position: {
+                                    my: "bottom",
+                                    at: "bottom",
+                                    of: "#container"
+                                }
+                            },
+                            "error",
+                            2000
+                        );
+                    }
+                });
+            }
+        });
+    });
+</script>
