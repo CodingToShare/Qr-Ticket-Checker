@@ -15,6 +15,10 @@ namespace Qr_Ticket_Checker.Models
         [Required(ErrorMessage = "El campo {0} es requerido")]
         public int TicketNumber { get; set; }
 
+        [Display(Name = "Template ID")]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        public string TemplateIdentifier { get; set; } = string.Empty;
+
         [Display(Name = "Creado")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]

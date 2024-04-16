@@ -30,6 +30,7 @@ namespace Qr_Ticket_Checker.Controllers
                 i.EventID,
                 i.EventName,
                 i.TicketNumber,
+                i.TemplateIdentifier,
                 i.Created,
                 i.CreatedBy,
                 i.Modify,
@@ -135,6 +136,7 @@ namespace Qr_Ticket_Checker.Controllers
             string EVENT_ID = nameof(Event.EventID);
             string EVENT_NAME = nameof(Event.EventName);
             string TICKET_NUMBER = nameof(Event.TicketNumber);
+            string TEMPLATE_IDENTIFIER = nameof(Event.TemplateIdentifier);
             string CREATED = nameof(Event.Created);
             string CREATED_BY = nameof(Event.CreatedBy);
             string MODIFY = nameof(Event.Modify);
@@ -152,7 +154,12 @@ namespace Qr_Ticket_Checker.Controllers
                 model.TicketNumber = Convert.ToInt32(values[TICKET_NUMBER]);
             }
 
-            if(values.Contains(CREATED)) {
+            if (values.Contains(TEMPLATE_IDENTIFIER))
+            {
+                model.TemplateIdentifier = Convert.ToString(values[TEMPLATE_IDENTIFIER]);
+            }
+
+            if (values.Contains(CREATED)) {
                 model.Created = Convert.ToDateTime(values[CREATED]);
             }
 

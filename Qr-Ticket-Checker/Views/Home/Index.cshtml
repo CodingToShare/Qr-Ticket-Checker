@@ -253,6 +253,7 @@
             .Controller("APIPeople")
             .LoadAction("Get")
             .UpdateAction("Put")
+                .DeleteAction("Delete")
             .Key("PersonID")
             .LoadParams(new { id = new JS("data.EventID") })
         )
@@ -289,6 +290,7 @@
         })
         .Editing(e => e
             .AllowUpdating(true)
+            .AllowDeleting(true)
         )
     )
 }

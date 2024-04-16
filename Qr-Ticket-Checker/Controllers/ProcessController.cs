@@ -66,12 +66,13 @@ namespace Qr_Ticket_Checker.Controllers
 
                     // Convertir el QR a Base64
                     var qrBase64 = Convert.ToBase64String(qrCodeAsPng);
-                    var imgTag = $"<img width='200' height='200' src= 'cid:*'/>";
+                    //var imgTag = $"<img width='200' height='200' src= 'cid:*'/>";
+                    var imgTag = $"";
 
                     var token = _configuration.GetValue<string>("EmailServices:ApiKey");
                     var from = _configuration.GetValue<string>("EmailServices:Email");
-                    var subject = $"Recuerda Guardar Este Correo Para Entrar al Evento - {eve.EventName}";
-                    var body = $"Hola, <br/> Escanea este código QR: <br/> {imgTag}";
+                    var subject = $"Skynet - Recuerda Guardar Este Correo Para Entrar al Evento - {eve.EventName}";
+
                     var stringContent = @$"{{
                         ""from"": {{
                             ""email"": ""{from}""
@@ -82,8 +83,6 @@ namespace Qr_Ticket_Checker.Controllers
                             }}
                         ],
                         ""subject"": ""{subject}"",
-                        ""text"": """",
-                        ""html"": ""{body}"",
                         ""attachments"": [
                             {{
                                 ""content"": ""{qrBase64}"",
@@ -91,7 +90,8 @@ namespace Qr_Ticket_Checker.Controllers
                                 ""filename"": ""QREvent"",
                                 ""id"": ""*""
                             }}
-                        ]
+                        ],
+                        ""template_id"": ""{eve.TemplateIdentifier}""
                     }}";
 
                     var client = new HttpClient();

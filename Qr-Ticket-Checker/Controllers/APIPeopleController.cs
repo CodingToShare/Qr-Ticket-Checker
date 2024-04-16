@@ -113,8 +113,7 @@ namespace Qr_Ticket_Checker.Controllers
 
             var token = _configuration.GetValue<string>("EmailServices:ApiKey");
             var from = _configuration.GetValue<string>("EmailServices:Email");
-            var subject = $"Recuerda Guardar Este Correo Para Entrar al Evento - {_context.Events.Where(x => x.EventID == model.EventID).FirstOrDefault().EventName}";
-            var body = $"Hola, <br/> Escanea este código QR: <br/> {imgTag}";
+            var subject = $"Skynet - Recuerda Guardar Este Correo Para Entrar al Evento - {_context.Events.Where(x => x.EventID == model.EventID).FirstOrDefault().EventName}";
             var stringContent = @$"{{
                         ""from"": {{
                             ""email"": ""{from}""
@@ -125,8 +124,6 @@ namespace Qr_Ticket_Checker.Controllers
                             }}
                         ],
                         ""subject"": ""{subject}"",
-                        ""text"": """",
-                        ""html"": ""{body}"",
                         ""attachments"": [
                             {{
                                 ""content"": ""{qrBase64}"",
@@ -134,7 +131,8 @@ namespace Qr_Ticket_Checker.Controllers
                                 ""filename"": ""QREvent"",
                                 ""id"": ""*""
                             }}
-                        ]
+                        ],
+                        ""template_id"": ""{_context.Events.Where(x => x.EventID == model.EventID).FirstOrDefault().TemplateIdentifier}""
                     }}";
 
             var client = new HttpClient();

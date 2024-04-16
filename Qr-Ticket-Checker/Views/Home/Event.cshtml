@@ -33,6 +33,8 @@
 
         columns.AddFor(m => m.TicketNumber);
 
+        columns.AddFor(m => m.TemplateIdentifier);
+
         columns.AddFor(m => m.Created).AllowEditing(false);
 
         columns.AddFor(m => m.CreatedBy).AllowEditing(false);
